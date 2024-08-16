@@ -129,7 +129,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Handles GET requests for the specified route.
+	 * Maps a GET request handler for the specified route.
 	 *
 	 * @param {string} pRoute - The route to handle GET requests for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
@@ -168,7 +168,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Adds a PUT route mapping to the Orator Service Server.
+	 * Maps a PUT request handler for the specified route.
 	 *
 	 * @param {string} pRoute - The route to be mapped.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
@@ -184,7 +184,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return this.doPut(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
-	 * Maps a PUT request with body parsing.
+	 * A helper method that maps a PUT request method with a body parser middleware.
 	 *
 	 * @param {string} pRoute - The route to send the PUT request to.
 	 * @param {...Function} fRouteProcessingFunctions - Optional route processing functions.
@@ -207,7 +207,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Handles HTTP POST requests -- this is a base function that does nothing; override by the serviceserver is expected.
+	 * Maps a POST request handler for the specified route.
 	 * 
 	 * @param {string} pRoute - The route to send the POST request to.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
@@ -223,7 +223,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return this.doPost(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
-	 * Handles a POST request with body parsing for the specified route.
+	 * A helper method that maps a POST request method with a body parser middleware.
 	 * 
 	 * @param {string} pRoute - The route to handle the POST request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
@@ -246,7 +246,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Adds a delete route mapping.
+	 * Maps a DEL request handler for the specified route.
 	 *
 	 * @param {string} pRoute - The route to map the delete function to.
 	 * @param {...Function} fRouteProcessingFunctions - The additional processing functions to execute
@@ -262,7 +262,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return this.doDel(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
-	 * A helper method that combines a delete handler with the `bodyParser` middleware.
+	 * A helper method that maps a DEL request method with a body parser middleware.
 	 * 
 	 * @param {string} pRoute - The route path for the DELETE request.
 	 * @param {...Function} fRouteProcessingFunctions - Additional route processing functions.
@@ -285,7 +285,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Add a PATCH route mapping.
+	 * Maps a PATCH request handler for the specified route.
 	 * 
 	 * @param {string} pRoute - The route mapping.
 	 * @param {...Function} fRouteProcessingFunctions - The route processing functions.
@@ -301,7 +301,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return this.doPatch(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
-	 * Map a PATCH route with the bodyParser middleware.
+	 * A helper method that maps a PATCH request method with a body parser middleware.
 	 * 
 	 * @param {string} pRoute - The route to map.
 	 * @param {...Function} fRouteProcessingFunctions - Route processing functions.
@@ -324,7 +324,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Add an OPTS route mapping.
+	 * Maps a OPT request handler for the specified route.
 	 *
 	 * @param {string} pRoute - The route to be mapped.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions for the route.
@@ -340,7 +340,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return this.doOpts(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
-	 * Adds body parser middleware to the route and calls the opts method.
+	 * A helper method that maps a OPT request method with a body parser middleware.
 	 * @param {string} pRoute - The route path.
 	 * @param {...Function} fRouteProcessingFunctions - The route processing functions.
 	 * @returns {Object} - The result of the opts method.
@@ -362,7 +362,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 		return true;
 	}
 	/**
-	 * Handles the HEAD request for a specific route.
+	 * Maps a HEAD request handler for the specified route.
 	 *
 	 * @param {string} pRoute - The route to handle the HEAD request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.

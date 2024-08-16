@@ -24,12 +24,12 @@
     },
     "homepage": "https://github.com/stevenvelozo/orator-serviceserver-base#readme",
     "devDependencies": {
-        "fable": "^3.0.73",
+        "fable": "^3.0.143",
         "orator": "^4.0.0",
-        "quackage": "^1.0.17"
+        "quackage": "^1.0.33"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.10"
+        "fable-serviceproviderbase": "^3.0.13"
     },
     "mocha": {
         "diff": true,
