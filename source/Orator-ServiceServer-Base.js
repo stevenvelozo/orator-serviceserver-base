@@ -118,6 +118,23 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 
 	/**
+	 * Registers a global handler function to be used by the Orator service server that runs before routing.
+	 * 
+	 * @param {function} fHandlerFunction - The handler function to be registered. It should have the prototype function(Request, Response, Next).
+	 * @returns {boolean} - Returns true if the handler function was successfully registered, false otherwise.
+	 */
+	pre(fHandlerFunction)
+	{
+		if (typeof(fHandlerFunction) != 'function')
+		{
+			this.log.error(`Orator PRE global handler mapping failed -- parameter was expected to be a function with prototype function(Request, Response, Next) but type was ${typeof(fHandlerFunction)} instead.`)
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Handles HTTP GET requests -- this is a base function that does nothing; override by the serviceserver is expected.
 	 *
 	 * @param {string} pRoute - The route of the request.
