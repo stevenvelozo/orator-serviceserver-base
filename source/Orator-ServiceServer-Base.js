@@ -411,6 +411,23 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 */
 
 	/**
+	 * Serve static files from a directory -- this is a base function that uses serve-static;
+	 * derived classes can override to use their own static file serving implementation (e.g. restify's built-in serveStatic plugin).
+	 *
+	 * @param {string} pRoute - The route to serve static files on.
+	 * @param {Object} pOptions - Options for the static file server.
+	 * @param {string} pOptions.directory - The directory to serve files from.
+	 * @param {string} [pOptions.default] - The default file to serve (e.g. 'index.html').
+	 * @returns {boolean} - Returns false in the base class; override in derived classes.
+	 */
+	serveStatic(pRoute, pOptions)
+	{
+		// The base class version of this does nothing -- override in derived classes
+		this.log.debug(`Orator serveStatic called for route [${pRoute}] and landed on the base class; the service provider likely does not implement static file serving.`);
+		return false;
+	}
+
+	/**
 	 * Invokes a method on the service server programmatically -- expects to be overloaded by the service provider.
 	 *
 	 * @param {string} pMethod - The method to invoke.

@@ -1,6 +1,6 @@
 {
     "name": "orator-serviceserver-base",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Base Orator serviceserver class",
     "main": "source/Orator-ServiceServer-Base.js",
     "scripts": {
@@ -25,7 +25,7 @@
     "homepage": "https://github.com/stevenvelozo/orator-serviceserver-base#readme",
     "devDependencies": {
         "fable": "^3.1.51",
-        "orator": "^5.0.1",
+        "orator": "^5.0.2",
         "quackage": "^1.0.45"
     },
     "dependencies": {
