@@ -1,6 +1,9 @@
 const libFableServiceProviderBase = require('fable-serviceproviderbase');
 
 /**
+ * @typedef {(pRequest: any, pResponse: any, fNext: (pError?: Error) => void) => void} RequestHandler
+ */
+/**
  * OratorServiceServerBase class represents the base class for the Orator service server.
  * It provides basic functionality for handling what is usually an HTTP service's lifecycle, content parsing, and route creation.
  * Derived classes can override the base functions to implement specific handlers (e.g. restify or express).
@@ -9,6 +12,11 @@ const libFableServiceProviderBase = require('fable-serviceproviderbase');
  */
 class OratorServiceServerBase extends libFableServiceProviderBase
 {
+	/**
+	 * @param {import('fable')|Record<string, any>} [pFable] - (optional) The fable instance, or the options object if there is no fable
+	 * @param {Record<string, any>|string} [pOptions] - (optional) The options object, or the service hash if there is no fable
+	 * @param {string} [pServiceHash] - (optional) The service hash to identify this service instance
+	 */
 	constructor(pFable, pOptions, pServiceHash)
 	{
         super(pFable, pOptions, pServiceHash);
@@ -31,8 +39,8 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	/**
 	 * Listens for network calls on the specified port (or starts a virtual serviceserver for that "port").
 	 * @param {number} pPort - The port number to listen on.
-	 * @param {Function} fCallback - The callback function to execute after listening.
-	 * @returns {any} The result of the callback function.
+	 * @param {(pError?: Error) => void} fCallback - The callback function to execute after listening.
+	 * @return {any} The result of the callback function.
 	 */
 	listen(pPort, fCallback)
 	{
@@ -45,8 +53,8 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	/**
 	 * Closes the service server.
 	 *
-	 * @param {Function} fCallback - The callback function to be executed after closing the server.
-	 * @returns {any} - The result of the callback function.
+	 * @param {(pError?: Error) => any} fCallback - The callback function to be executed after closing the server.
+	 * @return {any} - The result of the callback function.
 	 */
 	close(fCallback)
 	{
@@ -63,13 +71,13 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *************************************************************************/
 	/**
 	 * Middleware function for parsing the request body.
-	 * 
-	 * @param {Object} pOptions - The options for the body parser.
-	 * @returns {Function} - The middleware function.
+	 *
+	 * @param {Record<string, any>} [pOptions] - The options for the body parser.
+	 * @return {RequestHandler} - The middleware function.
 	 */
 	bodyParser(pOptions)
 	{
-		return (pRequest, pResponse, fNext) => 
+		return (pRequest, pResponse, fNext) =>
 			{
 				fNext();
 			};
@@ -81,7 +89,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	/*
 	 * Service Route Creation Functions
 	 *
-	 * These base functions provide basic validation for the routes, but don't actually 
+	 * These base functions provide basic validation for the routes, but don't actually
 	 * do anything with them.  The design intent here is to allow derived classes to call
 	 * these functions to validate that they conform to expected standards.
 	 *
@@ -102,9 +110,9 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *************************************************************************/
 	/**
 	 * Registers a global handler function to be used by the Orator service server.
-	 * 
-	 * @param {function} fHandlerFunction - The handler function to be registered. It should have the prototype function(Request, Response, Next).
-	 * @returns {boolean} - Returns true if the handler function was successfully registered, false otherwise.
+	 *
+	 * @param {RequestHandler} fHandlerFunction - The handler function to be registered. It should have the prototype function(Request, Response, Next).
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	use(fHandlerFunction)
 	{
@@ -119,9 +127,9 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 
 	/**
 	 * Registers a global handler function to be used by the Orator service server that runs before routing.
-	 * 
+	 *
 	 * @param {function} fHandlerFunction - The handler function to be registered. It should have the prototype function(Request, Response, Next).
-	 * @returns {boolean} - Returns true if the handler function was successfully registered, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	pre(fHandlerFunction)
 	{
@@ -139,7 +147,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route of the request.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions for the route.
-	 * @returns {boolean} - Returns true.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doGet(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -150,7 +158,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to handle GET requests for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
-	 * @returns {boolean} - Returns false if the route parameter is not a string, otherwise returns the result of the doGet function.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	get(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -163,10 +171,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * A helper method that maps a GET request method with a body parser middleware.
-	 * 
+	 *
 	 * @param {string} pRoute - The route path.
 	 * @param {...Function} fRouteProcessingFunctions - The route processing functions.
-	 * @returns {Promise} - A promise that resolves when the request is processed.
+	 * @returns {any} - Result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	getWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -178,7 +186,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to handle.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
-	 * @returns {boolean} - Returns true.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doPut(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -189,7 +197,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to be mapped.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
-	 * @returns {boolean} - Returns true if the route mapping was successful, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	put(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -205,7 +213,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to send the PUT request to.
 	 * @param {...Function} fRouteProcessingFunctions - Optional route processing functions.
-	 * @returns {Promise} - A promise that resolves when the PUT request is complete.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	putWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -217,7 +225,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to handle the POST request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
-	 * @returns {boolean} - Returns true if the POST request was handled successfully.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doPost(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -225,10 +233,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * Maps a POST request handler for the specified route.
-	 * 
+	 *
 	 * @param {string} pRoute - The route to send the POST request to.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed for the route.
-	 * @returns {boolean} Returns true if the POST request was successful, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	post(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -241,10 +249,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * A helper method that maps a POST request method with a body parser middleware.
-	 * 
+	 *
 	 * @param {string} pRoute - The route to handle the POST request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
-	 * @returns {boolean} - Returns true if the POST request was handled successfully.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	postWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -256,7 +264,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route of the resource to delete.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to be executed to delete the resource.
-	 * @returns {boolean} - Returns true if the resource is successfully deleted.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doDel(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -267,7 +275,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to map the delete function to.
 	 * @param {...Function} fRouteProcessingFunctions - The additional processing functions to execute
-	 * @returns {boolean} - Returns true if the route mapping was successfully deleted, otherwise false.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	del(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -280,10 +288,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * A helper method that maps a DEL request method with a body parser middleware.
-	 * 
+	 *
 	 * @param {string} pRoute - The route path for the DELETE request.
 	 * @param {...Function} fRouteProcessingFunctions - Additional route processing functions.
-	 * @returns {Promise} - A promise that resolves when the DELETE request is completed.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	delWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -295,7 +303,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to send the PATCH request to.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to apply to the route.
-	 * @returns {boolean} - Returns true if the PATCH request was successful, otherwise false.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doPatch(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -303,10 +311,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * Maps a PATCH request handler for the specified route.
-	 * 
+	 *
 	 * @param {string} pRoute - The route mapping.
 	 * @param {...Function} fRouteProcessingFunctions - The route processing functions.
-	 * @returns {boolean} - Returns true if the route handler was run successfully, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	patch(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -319,10 +327,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * A helper method that maps a PATCH request method with a body parser middleware.
-	 * 
+	 *
 	 * @param {string} pRoute - The route to map.
 	 * @param {...Function} fRouteProcessingFunctions - Route processing functions.
-	 * @returns {Promise} - A promise that resolves when the patching is complete.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	patchWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -331,10 +339,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 
 	/**
 	 * Handles HTTP OPT requests -- this is a base function that does nothing; override by the serviceserver is expected.
-	 * 
+	 *
 	 * @param {string} pRoute - The route.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to apply to the route.
-	 * @returns {boolean} - Returns true by default.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doOpts(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -345,7 +353,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to be mapped.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions for the route.
-	 * @returns {boolean} - Returns true if the route mapping is successful, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	opts(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -369,10 +377,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 
 	/**
 	 * Handles HTTP HEAD requests -- this is a base function that does nothing; override by the serviceserver is expected.
-	 * 	
+	 *
 	 * @param {string} pRoute - The route to handle the HEAD request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
-	 * @returns {boolean} - Returns true if the HEAD request was handled successfully.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	doHead(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -383,7 +391,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	 *
 	 * @param {string} pRoute - The route to handle the HEAD request for.
 	 * @param {...Function} fRouteProcessingFunctions - The processing functions to execute for the route.
-	 * @returns {boolean} - Returns true if the HEAD route mapping is successful, false otherwise.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	head(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -397,10 +405,10 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	}
 	/**
 	 * A helper method that combines the HEAD method with the bodyParser middleware.
-	 * 
+	 *
 	 * @param {string} pRoute - The route path for the HEAD request.
 	 * @param {...Function} fRouteProcessingFunctions - Optional route processing functions.
-	 * @returns {Promise} - A promise that resolves when the HEAD request is completed.
+	 * @returns {any} - The result of adding the route to the concrete service provider (ex. a route object, a boolean).
 	 */
 	headWithBodyParser(pRoute, ...fRouteProcessingFunctions)
 	{
@@ -440,6 +448,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 	{
 		// The base class version of this does nothing
 		this.log.debug(`Orator invoke called for route [${pRoute}] and landed on the base class; the service provider likely does not implement programmatic invoke capabilities.`, pData);
+		fCallback();
 		return false;
 	}
 }

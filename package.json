@@ -1,6 +1,6 @@
 {
     "name": "orator-serviceserver-base",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Base Orator serviceserver class",
     "main": "source/Orator-ServiceServer-Base.js",
     "scripts": {
@@ -11,8 +11,12 @@
         "build": "npx quack build",
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t orator-serviceserver-base-image:local",
         "docker-dev-run": "docker run -it -d --name orator-serviceserver-base-dev -p 40800:8080 -p 11875:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/orator-serviceserver-base\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" orator-serviceserver-base-image:local",
-        "docker-dev-shell": "docker exec -it orator-serviceserver-base-dev /bin/bash"
+        "docker-dev-shell": "docker exec -it orator-serviceserver-base-dev /bin/bash",
+        "lint": "eslint source/**/*.js test/**/*.js",
+        "check": "tsc -p ./tsconfig.json --noEmit",
+        "types": "tsc -p ./tsconfig.build.json"
     },
+    "types": "types/Orator-ServiceServer-Base.d.ts",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/stevenvelozo/orator-serviceserver-base.git"
@@ -24,12 +28,21 @@
     },
     "homepage": "https://github.com/stevenvelozo/orator-serviceserver-base#readme",
     "devDependencies": {
-        "fable": "^3.1.51",
-        "orator": "^5.0.2",
-        "quackage": "^1.0.45"
+        "@eslint/js": "^9.39.1",
+        "@types/jquery": "^3.5.33",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^16.18.126",
+        "@types/sinon": "^17.0.4",
+        "eslint": "^9.39.1",
+        "fable": "^3.1.61",
+        "globals": "^16.5.0",
+        "orator": "^6.0.2",
+        "quackage": "^1.0.56",
+        "sinon": "^20.0.0",
+        "typescript": "^5.9.3"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.15"
+        "fable-serviceproviderbase": "^3.0.18"
     },
     "mocha": {
         "diff": true,
