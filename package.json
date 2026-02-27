@@ -7,7 +7,7 @@
         "test": "npx mocha -u tdd -R spec",
         "start": "node source/Orator-ServiceServer-Base.js",
         "tests": "npx mocha -u tdd --exit -R spec --grep",
-        "coverage": "npx nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
+        "coverage": "npx quack coverage",
         "build": "npx quack build",
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t orator-serviceserver-base-image:local",
         "docker-dev-run": "docker run -it -d --name orator-serviceserver-base-dev -p 40800:8080 -p 11875:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/orator-serviceserver-base\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" orator-serviceserver-base-image:local",
