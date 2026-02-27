@@ -1,6 +1,6 @@
 {
     "name": "orator-serviceserver-base",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Base Orator serviceserver class",
     "main": "source/Orator-ServiceServer-Base.js",
     "scripts": {
@@ -42,7 +42,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.18"
+        "fable-serviceproviderbase": "^3.0.19"
     },
     "mocha": {
         "diff": true,
