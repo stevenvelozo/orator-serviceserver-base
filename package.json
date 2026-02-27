@@ -4,9 +4,9 @@
     "description": "Base Orator serviceserver class",
     "main": "source/Orator-ServiceServer-Base.js",
     "scripts": {
-        "test": "npx mocha -u tdd -R spec",
+        "test": "npx quack test",
         "start": "node source/Orator-ServiceServer-Base.js",
-        "tests": "npx mocha -u tdd --exit -R spec --grep",
+        "tests": "npx quack test -g",
         "coverage": "npx quack coverage",
         "build": "npx quack build",
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t orator-serviceserver-base-image:local",
