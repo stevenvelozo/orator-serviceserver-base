@@ -866,26 +866,28 @@ suite
 
 				test
 				(
-					'head() should return true but does not delegate to doHead (known issue)',
+					'head() should call doHead() with the route and handlers',
 					(fDone) =>
 					{
-						// The base class head() method validates the route but returns true
-						// directly without calling this.doHead(). This is a known issue
-						// documented in the codebase.
 						let tmpFable = new libFable({Product: 'BaseClassTests', ProductVersion: '0.0.0'});
 						let tmpServer = new libOratorServiceServer(tmpFable, {});
 
-						let tmpDoHeadCalled = false;
-						tmpServer.doHead = (pRoute) =>
+						let tmpCapturedRoute = null;
+						let tmpCapturedHandlers = [];
+
+						tmpServer.doHead = (pRoute, ...fRouteProcessingFunctions) =>
 						{
-							tmpDoHeadCalled = true;
+							tmpCapturedRoute = pRoute;
+							tmpCapturedHandlers = fRouteProcessingFunctions;
 							return true;
 						};
 
-						let tmpResult = tmpServer.head('/api/status', () => {});
-						Expect(tmpResult).to.equal(true);
-						// doHead is NOT called because of the known bug
-						Expect(tmpDoHeadCalled).to.equal(false);
+						let tmpHandler = () => {};
+						tmpServer.head('/api/status', tmpHandler);
+
+						Expect(tmpCapturedRoute).to.equal('/api/status');
+						Expect(tmpCapturedHandlers).to.have.lengthOf(1);
+						Expect(tmpCapturedHandlers[0]).to.equal(tmpHandler);
 
 						return fDone();
 					}
@@ -1362,9 +1364,19 @@ suite
 						let tmpFable = new libFable({Product: 'BaseClassTests', ProductVersion: '0.0.0'});
 						let tmpServer = new libOratorServiceServer(tmpFable, {});
 
-						// headWithBodyParser calls head(), and head() returns true (without calling doHead)
-						let tmpResult = tmpServer.headWithBodyParser('/api/status', () => {});
-						Expect(tmpResult).to.equal(true);
+						let tmpCapturedHandlers = [];
+						tmpServer.doHead = (pRoute, ...fRouteProcessingFunctions) =>
+						{
+							tmpCapturedHandlers = fRouteProcessingFunctions;
+							return true;
+						};
+
+						let tmpHandler = () => {};
+						tmpServer.headWithBodyParser('/api/status', tmpHandler);
+
+						Expect(tmpCapturedHandlers).to.have.lengthOf(2);
+						Expect(tmpCapturedHandlers[0]).to.be.a('function');
+						Expect(tmpCapturedHandlers[1]).to.equal(tmpHandler);
 
 						return fDone();
 					}

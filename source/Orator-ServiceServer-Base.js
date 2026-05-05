@@ -413,8 +413,7 @@ class OratorServiceServerBase extends libFableServiceProviderBase
 			this.log.error(`Orator HEAD Route mapping failed -- route parameter was ${typeof(pRoute)} instead of a string.`)
 			return false;
 		}
-
-		return true;
+		return this.doHead(pRoute, ...fRouteProcessingFunctions);
 	}
 	/**
 	 * A helper method that combines the HEAD method with the bodyParser middleware.

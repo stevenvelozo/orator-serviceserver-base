@@ -1,6 +1,6 @@
 {
     "name": "orator-serviceserver-base",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Base Orator serviceserver class",
     "main": "source/Orator-ServiceServer-Base.js",
     "scripts": {
@@ -34,10 +34,10 @@
         "@types/node": "^16.18.126",
         "@types/sinon": "^17.0.4",
         "eslint": "^9.39.1",
-        "fable": "^3.1.67",
+        "fable": "^3.1.71",
         "globals": "^16.5.0",
-        "orator": "^6.0.4",
-        "quackage": "^1.0.65",
+        "orator": "^6.1.1",
+        "quackage": "^1.2.3",
         "sinon": "^20.0.0",
         "typescript": "^5.9.3"
     },
